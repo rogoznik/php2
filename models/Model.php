@@ -5,33 +5,37 @@ use app\services\Db;
 
 abstract class Model
 {
-    protected $db;
-
-    public function __construct()
+    public static function getOne($id)
     {
-        $this->db = $this->getDb();
+        $tableName = static::getTableName();
+        return static::getDb()->fetchObject(
+            "SELECT * FROM {$tableName} WHERE id = :id",
+            ['id' => $id],
+            get_called_class()
+        );
     }
 
-    public function getOne($id)
+    public static function getAll()
     {
-        return $this->db->queryOne("SELECT * FROM {$this->getTableName()} WHERE id = :id", ['id' => $id]);
+        $tableName = static::getTableName();
+        return static::getDb()->fetchAllAsArrayOfObject(
+            "SELECT * FROM {$tableName}",
+            [],
+            get_called_class()
+        );
     }
 
-    public function getAll()
-    {
-        return $this->db->queryAll("SELECT * FROM {$this->getTableName()}");
-    }
-
-    private function getDb()
+    private static function getDb()
     {
         return Db::getInstance();
     }
 
-    abstract public function getTableName();
+    abstract public static function getTableName();
 
     public function create($values)
     {
-        $sql = "INSERT INTO {$this->getTableName()} (";
+        $tableName = static::getTableName();
+        $sql = "INSERT INTO {$tableName} (";
         $val = "VALUES (";
         $i = 0;
         foreach ($values as $key => $value) {
@@ -52,7 +56,8 @@ abstract class Model
     
     public function update($values, $params)
     {
-        $sql = "UPDATE {$this->getTableName()} SET ";
+        $tableName = static::getTableName();
+        $sql = "UPDATE {$tableName} SET ";
         $i = 0;
         foreach ($values as $key => $value) {
             $sql .= "{$key} = '{$value}'";
@@ -67,12 +72,8 @@ abstract class Model
     
     public function delete($params)
     {
-        return $this->db->execute("DELETE FROM {$this->getTableName()} WHERE id = :id", $params);
-    }
-    
-    public function select($params)
-    {
-        return $this->db->execute("SELECT * FROM {$this->getTableName()} WHERE id = :id", $params);
+        $tableName = static::getTableName();
+        return $this->db->execute("DELETE FROM {$tableName} WHERE id = :id", $params);
     }
     
 }

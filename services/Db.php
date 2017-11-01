@@ -69,14 +69,28 @@ class Db
         return true;
     }
     
-    public function queryAll($sql, $params = [])
+    public function fetchAll($sql, $params = [])
     {
         return $this->query($sql, $params)->fetchAll();
     }
     
-    public function queryOne($sql, $params = [])
+    public function fetchOne($sql, $params = [])
     {
-        return $this->queryAll($sql, $params)[0];
+        return $this->fetchAll($sql, $params)[0];
+    }
+    
+    public function fetchObject($sql, $params = [], $class)
+    {
+        $smtp = $this->query($sql, $params);
+        $smtp->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class);
+        return $smtp->fetch();
+    }
+    
+    public function fetchAllAsArrayOfObject($sql, $params = [], $class)
+    {
+        $smtp = $this->query($sql, $params);
+        $smtp->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class);
+        return $smtp->fetchAll();
     }
 }
 

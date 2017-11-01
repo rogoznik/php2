@@ -6,14 +6,15 @@ class Category extends Model
     public $id;
     public $name;
     
-    public function __construct($id, $name)
+    public function __construct0(){}
+    
+    public function __construct($id = null, $name = null)
     {
-        parent::__construct();
         $this->id = $id;
         $this->name = $name;
     }
 
-    public function getTableName()
+    public static function getTableName()
     {
         return "categories";
     }
