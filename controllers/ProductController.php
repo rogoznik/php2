@@ -1,21 +1,20 @@
 <?php
 namespace app\controllers;
 
-class ProductController
+use app\models\Product;
+
+class ProductController extends Controller
 {
-    private $action;
-    
-    public function run($action)
+    public function actionIndex()
     {
-        $this->action = $action;
-        $action = "action" . ucfirst($this->action);
-        $this->$action();
+        echo "Catalog";
     }
-    
     
     public function actionCard()
     {
-        echo "123123123";
+        $id = $_GET['id'];
+        $product = Product::getOne($id);
+        echo $this->render("card", ['product' => $product]);
     }
 }
 

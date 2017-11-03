@@ -8,7 +8,7 @@ require_once '../services/Autoloader.php';
 
 spl_autoload_register([new Autoloader(), 'loadClass']);
 
-$controllerName = $_GET['c'];
+$controllerName = $_GET['c'] ?: "product";
 $actionName = $_GET['a'];
 
 $controllerClass = CONTROLLERS_NAMESPACE . ucfirst($controllerName) . "Controller";
