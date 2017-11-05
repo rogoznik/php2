@@ -1,7 +1,7 @@
 <?php
 namespace app\models;
 
-class Product extends Model
+class Product extends DataEntity
 {
     public $id;
     public $name;
@@ -16,11 +16,6 @@ class Product extends Model
         $this->description = $description;
         $this->price = $price;
         $this->idBrand = $idBrand;
-    }
-    
-    public static function getTableName()
-    {
-        return "products";
     }
 }
 

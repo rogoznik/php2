@@ -19,7 +19,7 @@ class Controller
     {
         if ($this->useLayout) {
             return $this->renderTemplate("layouts/{$this->layout}",
-            ['content' => $this->renderTemplate($template, $params)]
+                ['content' => $this->renderTemplate($template, $params)]
             );
         } else {
             return $this->renderTemplate($template, $params);
@@ -28,17 +28,26 @@ class Controller
     
     public function renderTemplate($template, $params)
     {
-        extract($params);
         ob_start();
-        $className = explode('\\', get_called_class())[count(explode('\\', get_called_class()))-1];
-        $controllerName = strtolower(explode('Controller', $className)[0]);
         if (strpos($template, 'layouts/') === 0) {
+            extract($params);;
             include ROOT_DIR . "views/{$template}.php";
-        } else if (strpos($template, 'layouts/') === false){
-            include ROOT_DIR . "views/{$controllerName}/{$template}.php";
+        } else if (strpos($template, 'layouts/') === false) {
+            $className = explode('\\', get_called_class())[count(explode('\\', get_called_class()))-1];
+            $controllerName = strtolower(explode('Controller', $className)[0]);
+            if (is_array($params['product'])) {
+                foreach ($params['product'] as $param) {
+                    extract(['product' => $param]);
+                    include ROOT_DIR . "views/{$controllerName}/{$template}.php";
+                }
+            } else {
+                extract($params);
+                include ROOT_DIR . "views/{$controllerName}/{$template}.php";
+            }
         }
-        
+
         return ob_get_clean();
+
     }
 }
 

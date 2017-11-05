@@ -1,19 +1,21 @@
 <?php
 namespace app\controllers;
 
-use app\models\Product;
+use app\models\DataGetter;
+use app\models\repositories\ProductRepository;
 
 class ProductController extends Controller
 {
     public function actionIndex()
     {
-        echo "Catalog";
+        $products = (new ProductRepository())->getAll();
+        echo $this->render("card", ['product' => $products]);
     }
     
     public function actionCard()
     {
         $id = $_GET['id'];
-        $product = Product::getOne($id);
+        $product = (new ProductRepository())->getOne($id);
         echo $this->render("card", ['product' => $product]);
     }
 }
