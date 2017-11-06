@@ -1,0 +1,12 @@
+{
+    "name": "darkfenix/php2.local",
+    "authors": [
+        {
+            "name": "rogoznik",
+            "email": "nikrogoz@yandex.ru"
+        }
+    ],
+    "require": {
+        "twig/twig": "*"
+    }
+}

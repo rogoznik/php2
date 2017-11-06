@@ -7,6 +7,7 @@ class AuthController extends Controller
 {
     public function actionIndex()
     {
-        echo $this->render("formAuth", []);
+        $templateName = $this->controllerName . "/auth";
+        echo $this->render($templateName, []);
     }
 }

@@ -1,13 +1,36 @@
 <?php
 namespace app\controllers;
 
+
+
+use app\services\renderers\IRender;
+use app\services\renderers\TemplateRenderer;
+
 class Controller
 {
     private $action;
     private $defaultAction = "index";
     private $layout = "main";
     private $useLayout = true;
-    
+    protected $controllerName;
+
+
+    /**
+     * @var TemplateRenderer
+     */
+    private $renderer = null;
+
+    /**
+     * Controller constructor.
+     */
+    public function __construct(IRender $renderer)
+    {
+        $this->renderer = $renderer;
+        $className = explode('\\', get_called_class())[count(explode('\\', get_called_class()))-1];
+        $this->controllerName = strtolower(explode('Controller', $className)[0]);
+    }
+
+
     public function run($action)
     {
         $this->action = $action ?: $this->defaultAction;
@@ -28,26 +51,7 @@ class Controller
     
     public function renderTemplate($template, $params)
     {
-        ob_start();
-        if (strpos($template, 'layouts/') === 0) {
-            extract($params);;
-            include ROOT_DIR . "views/{$template}.php";
-        } else if (strpos($template, 'layouts/') === false) {
-            $className = explode('\\', get_called_class())[count(explode('\\', get_called_class()))-1];
-            $controllerName = strtolower(explode('Controller', $className)[0]);
-            if (is_array($params['product'])) {
-                foreach ($params['product'] as $param) {
-                    extract(['product' => $param]);
-                    include ROOT_DIR . "views/{$controllerName}/{$template}.php";
-                }
-            } else {
-                extract($params);
-                include ROOT_DIR . "views/{$controllerName}/{$template}.php";
-            }
-        }
-
-        return ob_get_clean();
-
+        return $this->renderer->render($template, $params);
     }
 }
 

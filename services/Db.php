@@ -79,14 +79,14 @@ class Db
         return $this->fetchAll($sql, $params)[0];
     }
     
-    public function fetchObject($sql, $params = [], $class)
+    public function fetchObject($sql, $class, $params = [])
     {
         $smtp = $this->query($sql, $params);
         $smtp->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class);
         return $smtp->fetch();
     }
     
-    public function fetchAllAsArrayOfObject($sql, $params = [], $class)
+    public function fetchAllAsArrayOfObject($sql, $class, $params = [])
     {
         $smtp = $this->query($sql, $params);
         $smtp->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class);
