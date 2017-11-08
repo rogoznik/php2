@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use app\models\DataGetter;
 use app\models\repositories\ProductRepository;
+use app\services\Request;
 
 class ProductController extends Controller
 {
@@ -16,7 +17,7 @@ class ProductController extends Controller
     
     public function actionCard()
     {
-        $id = $_GET['id'];
+        $id = (new Request())->getParams()['id'];
         $product = (new ProductRepository())->getOne($id);
         $templateName = $this->controllerName . "/card";
         echo $this->render($templateName, ['product' => $product]);

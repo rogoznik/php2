@@ -23,7 +23,7 @@ class Controller
     /**
      * Controller constructor.
      */
-    public function __construct(IRender $renderer)
+    public function __construct(IRender $renderer = null)
     {
         $this->renderer = $renderer;
         $className = explode('\\', get_called_class())[count(explode('\\', get_called_class()))-1];
@@ -31,7 +31,7 @@ class Controller
     }
 
 
-    public function run($action)
+    public function run($action = null)
     {
         $this->action = $action ?: $this->defaultAction;
         $action = "action" . ucfirst($this->action);
