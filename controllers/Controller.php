@@ -5,6 +5,7 @@ namespace app\controllers;
 
 use app\services\renderers\IRender;
 use app\services\renderers\TemplateRenderer;
+use app\services\RequestNotMatchException;
 
 class Controller
 {
@@ -22,6 +23,7 @@ class Controller
 
     /**
      * Controller constructor.
+     * @param IRender|null $renderer
      */
     public function __construct(IRender $renderer = null)
     {
@@ -34,8 +36,11 @@ class Controller
     public function run($action = null)
     {
         $this->action = $action ?: $this->defaultAction;
-        $action = "action" . ucfirst($this->action);
-        $this->$action();
+        $realAction = "action" . ucfirst($this->action);
+//        if (!method_exists(get_called_class(), $realAction)) {
+//            throw new RequestNotMatchException("Page not found");
+//        }
+        $this->$realAction();
     }
     
     public function render($template, $params)
